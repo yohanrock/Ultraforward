@@ -22,15 +22,12 @@ def run_server():
     print(f"Listening on port {port} (dummy server for Render)")
     server.serve_forever()
 
-async def run_bot():
-    bot = Bot()
-    await bot.run()  # Run async run() method
-
 if __name__ == '__main__':
     # Start the HTTP server in a background thread
     server_thread = threading.Thread(target=run_server, daemon=True)
     server_thread.start()
     print("HTTP server started in background thread")
 
-    # Run the bot in the main thread with asyncio
-    asyncio.run(run_bot())
+    # Run the bot in the main thread
+    bot = Bot()
+    bot.run()  # Run directly, as Pyrogram manages its own event loop
