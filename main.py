@@ -11,7 +11,7 @@ class DummyHandler(BaseHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(b'Bot is running on @bynude_bot!')
 
-    def do_HEAD(self):  # Handle HEAD requests for Render health checks
+    def do_HEAD(self):  # Handle Render's HEAD health checks
         self.send_response(200)
         self.send_header('Content-type', 'text/plain')
         self.end_headers()
@@ -22,22 +22,15 @@ def run_server():
     print(f"Listening on port {port} (dummy server for Render)")
     server.serve_forever()
 
-def run_bot():
-    # Create a new event loop for this thread
-    loop = asyncio.new_event_loop()
-    asyncio.set_event_loop(loop)
-    try:
-        # Initialize and run the bot
-        bot = Bot()
-        loop.run_until_complete(bot.run())  # Run async run() method
-    finally:
-        loop.close()
+async def run_bot():
+    bot = Bot()
+    await bot.run()  # Run async run() method
 
 if __name__ == '__main__':
-    # Start the bot in a background thread with its own event loop
-    bot_thread = threading.Thread(target=run_bot, daemon=True)
-    bot_thread.start()
-    print("Bot started in background thread")
+    # Start the HTTP server in a background thread
+    server_thread = threading.Thread(target=run_server, daemon=True)
+    server_thread.start()
+    print("HTTP server started in background thread")
 
-    # Start dummy HTTP server in the main thread
-    run_server()
+    # Run the bot in the main thread with asyncio
+    asyncio.run(run_bot())
