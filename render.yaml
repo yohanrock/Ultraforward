@@ -20,4 +20,4 @@ services:
       - key: BOT_SESSION
         sync: false
       - key: PORT
-        sync:8080
+        value:8080
