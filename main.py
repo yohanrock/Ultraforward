@@ -11,7 +11,7 @@ class DummyHandler(BaseHTTPRequestHandler):
         self.wfile.write(b'Bot is running!')
 
 def run_server():
-    port = int(os.environ.get('PORT', 8080))  # Use Render’s PORT
+    port = int(os.environ.get('PORT', 8080))  # Use PORT env var, default to 8080
     server = HTTPServer(('0.0.0.0', port), DummyHandler)
     print(f"Listening on port {port}")
     server.serve_forever()
